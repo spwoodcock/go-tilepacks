@@ -8,7 +8,8 @@ import (
 	"math"
 	"strconv"
 
-	_ "github.com/mattn/go-sqlite3" // Register sqlite3 database driver
+    _ "github.com/ncruces/go-sqlite3/driver" // Register sqlite3 database driver
+    _ "github.com/ncruces/go-sqlite3/embed"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/maptile"
 )
