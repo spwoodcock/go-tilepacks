@@ -14,7 +14,7 @@ const result = WASI.start(fetch("/tilepack-wasi.wasm"), {
   // ],
   args: [
     "tilepack",
-    "-dsn", "root=/destdir format=jpg",
+    "-dsn", "root=/ format=jpg",
     "-url-template", "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}",
     "-bounds", "-180,-90,180,90",
     "-zooms", "1",
@@ -23,16 +23,7 @@ const result = WASI.start(fetch("/tilepack-wasi.wasm"), {
   stdout: (out) => console.log("stdout", out),
   stderr: (err) => console.error("stderr", err),
   stdin: () => prompt("stdin:"),
-  // fs: {
-  //   "/test.mbtiles": {
-  //     path: "/test.mbtiles",
-  //     timestamps: {
-  //       access: new Date(),
-  //       change: new Date(),
-  //       modification: new Date(),
-  //     },
-  //     mode: "binary",
-  //     content: new Uint8Array(),
-  //   },
-  // },
 });
+
+// NOTE abandoned this implementation as the WASI runtime environment has
+// no network access!! '53: write udp 127.0.0.1:8->[::1]:53: write: Connection reset by peer'
