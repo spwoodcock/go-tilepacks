@@ -14,15 +14,12 @@ onmessage = async (event) => {
 
       go.argv = [
         "tilepack",
-        "-dsn", `file:${filename}?vfs=opfs`,
-        "-url-template", "https://tiles.openaerialmap.org/66e3bb93cd0baa0001b6210e/0/66e3bb93cd0baa0001b6210f/{z}/{x}/{y}",
-        "-bounds", "5.547621,-0.223589,5.556166,-0.214256",
-        "-zooms", "14",
-        "-output-mode", "mbtiles",
-        "-mbtiles-format", "png",
-        "-ensure-gzip=false",
-        "-tileset-name", "agbogloshie_drone",
-      ];
+        "-dsn", "root=/destdir format=jpg",
+        "-url-template", "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}",
+        "-bounds", "-180,-90,180,90",
+        "-zooms", "1",
+        "-output-mode", "disk",
+      ]    
 
       const response = await fetch("tilepack.wasm");
       const wasmModule = await WebAssembly.instantiateStreaming(response, go.importObject);
