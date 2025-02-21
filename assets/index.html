@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SQLite + Go WASM with OPFS</title>
+</head>
+<body>
+  <h1>SQLite + Go WASM Example</h1>
+  <button id="start">Start Process</button>
+  <pre id="log"></pre>
+
+  <script>
+    const log = (msg) => document.getElementById('log').textContent += msg + '\n';
+    const error = console.error;
+
+    const initializeSQLite = async () => {
+        try {
+            log('Loading and initializing SQLite3 module...');
+
+            const promiser = await new Promise((resolve) => {
+            const _promiser = sqlite3Worker1Promiser({
+                onready: () => resolve(_promiser),
+            });
+            });
+
+            log('Done initializing. Running demo...');
+
+            const configResponse = await promiser('config-get', {});
+            log('Running SQLite3 version', configResponse.result.version.libVersion);
+
+            const openResponse = await promiser('open', {
+                filename: 'file:tiles.mbtiles?vfs=opfs',
+            });
+            const { dbId } = openResponse;
+            log(
+            'OPFS is available, created persisted database at',
+            openResponse.result.filename.replace(/^file:(.*?)\?vfs=opfs$/, '$1'),
+            );
+            // Your SQLite code here.
+        } catch (err) {
+            if (!(err instanceof Error)) {
+            err = new Error(err.result.message);
+            }
+            error(err.name, err.message);
+        }
+    };
+
+    initializeSQLite();
+
+    const worker = new Worker('worker.js');
+
+    worker.onmessage = ({ data }) => log(data);
+    worker.onerror = (e) => log(`Error: ${e.message}`);
+
+    document.getElementById('start').onclick = () => {
+      worker.postMessage({ action: 'start' });
+      log('Process started...');
+    };
+  </script>
+</body>
+</html>
