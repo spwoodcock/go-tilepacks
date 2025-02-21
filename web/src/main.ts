@@ -14,15 +14,12 @@ export async function tilepack(): Promise<void> {
 
   go.argv = [
     "tilepack",
-    "-dsn", "/test.mbtiles",
-    "-url-template", "http://localhost:8080/proxy?url=https://tiles.openaerialmap.org/66e3bb93cd0baa0001b6210e/0/66e3bb93cd0baa0001b6210f/{z}/{x}/{y}",
-    "-bounds", "5.547621,-0.223589,5.556166,-0.214256",
-    "-zooms", "14",
-    "-output-mode", "mbtiles",
-    "-mbtiles-format", "png",
-    "-ensure-gzip=false",
-    "-tileset-name", "test",
-  ];
+    "-dsn", "root=/destdir format=jpg",
+    "-url-template", "http://localhost:8080/proxy?url=http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}",
+    "-bounds", "-180,-90,180,90",
+    "-zooms", "1",
+    "-output-mode", "disk",
+  ],
 
   log("Loading tilepack.wasm...");
   const response = await fetch(
